@@ -1,4 +1,4 @@
-﻿生成启动时间为 2018/4/19 16:50:14。
+﻿生成启动时间为 2018/4/19 17:30:20。
      1>项目“C:\Users\McdFreedom\kemyond\c_api_dps\Dps\Dps.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          D:\software\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\McdFreedom\kemyond\c_api_dps\third\inc /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
@@ -12,4 +12,4 @@
 
 生成成功。
 
-已用时间 00:00:01.83
+已用时间 00:00:02.45
