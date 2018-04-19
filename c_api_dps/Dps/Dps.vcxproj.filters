@@ -33,19 +33,19 @@
     <ClInclude Include="dpr_error.h">
       <Filter>头文件\common</Filter>
     </ClInclude>
-    <ClInclude Include="Tools.h">
-      <Filter>头文件\connection</Filter>
-    </ClInclude>
     <ClInclude Include="dps_common.h">
       <Filter>头文件\common</Filter>
     </ClInclude>
+    <ClInclude Include="DBConnect.h">
+      <Filter>头文件\connection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tools.cpp">
-      <Filter>源文件\connection</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DBConnect.cpp">
+      <Filter>源文件\connection</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

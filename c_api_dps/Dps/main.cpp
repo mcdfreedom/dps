@@ -13,13 +13,13 @@
 #include <stdlib.h> //exit getenv
 
 //自定义类
-#include "Tools.h"
+#include "DBconnect.h"
 
 
 int main(int argc, char* argv[])
 {
 	// 实例化数据库对象
-	sql::mysql_connection_pool *pPool = new sql::mysql_connection_pool();
+	sql::CConnPool *pPool = new sql::CConnPool();
 
 	/**
 	*  功能描述:数据库相关配置
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 		printf("pPool success create %d connection \n", iRet);
 
 	// \ 获取队列中连接
-	sql::CTools *pTool = pPool->GetInstance()->GetConnection();
+	sql::CDBConnect *pDBconnect = pPool->GetInstance()->GetConnection();
 	/**
 	*  功能描述:查询数据库
 	*  @param sSql 查询sql
@@ -68,11 +68,11 @@ int main(int argc, char* argv[])
 	*  @return
 	*/
 	string sSql = "select * from ruleConf";
-	pTool->query(sSql, sSql.length());
+	pDBconnect->query(sSql, sSql.length());
 	MYSQL_ROW oRow;
-	MYSQL_RES *pRes = pTool->query(sSql, sSql.length());
+	MYSQL_RES *pRes = pDBconnect->query(sSql, sSql.length());
 	while (oRow = mysql_fetch_row(pRes)) {
-		for (int t = 0; t<mysql_num_fields(pRes); t++) {
+		for (int t = 0; t< mysql_num_fields(pRes); t++) {
 			printf("%s \n", oRow[t]);
 		}
 	}
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 	*  @return
 	*/
 
-	iRet = pTool->delete_sql("delete from ruleConf where logTypeId ='aa'");
+	iRet = pDBconnect->delete_sql("delete from ruleConf where logTypeId ='aa'");
 	if (iRet <= 0)
 		printf("delete_sql failed \n");
 
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 	*  @return
 	*/
 
-	iRet = pTool->insert_sql("insert into ruleConf values ('aa','cc')");
+	iRet = pDBconnect->insert_sql("insert into ruleConf values ('aa','cc')");
 	if (iRet <= 0)
 		printf("insert_sql failed \n");
 
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 	*  @return
 	*/
 
-	iRet = pTool->update_sql("UPDATE ruleConf SET logTypeId = 'newAA' WHERE logTypeId = 'aa'");
+	iRet = pDBconnect->update_sql("UPDATE ruleConf SET logTypeId = 'newAA' WHERE logTypeId = 'aa'");
 	if (iRet <= 0)
 		printf("insert_sql failed \n");
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 	*  @param null
 	*  @return
 	*/
-	pPool->ReleaseConnection(pTool);
+	pPool->ReleaseConnection(pDBconnect);
 
 	// \程序结束
 	if (pPool != NULL)

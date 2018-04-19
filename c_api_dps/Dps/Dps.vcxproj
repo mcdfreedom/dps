@@ -15,11 +15,11 @@
     <ClInclude Include="dps_common.h" />
     <ClInclude Include="dps_define.h" />
     <ClInclude Include="dps_enum.h" />
-    <ClInclude Include="Tools.h" />
+    <ClInclude Include="DBConnect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Tools.cpp" />
+    <ClCompile Include="DBConnect.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7DA265C1-2AAF-4A99-BBDC-C39D71337E65}</ProjectGuid>
