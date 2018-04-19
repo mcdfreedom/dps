@@ -52,8 +52,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\dblib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\McdFreedom\kemyond\c_api_dps\third\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\McdFreedom\kemyond\c_api_dps\third\inc;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -65,12 +65,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\McdFreedom\kemyond\c_api_dps\third\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\dblib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\McdFreedom\kemyond\c_api_dps\third\dblib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libmysql.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

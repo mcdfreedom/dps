@@ -4,7 +4,7 @@
 #define DATA_TYPE_INT               4   //整型  
 #define DATA_TYPE_CHARPTR           1   //char*类型         
 #define DATA_TYPE_INVALID           0   //无效类型  
-#define TEST_DATA_LENGTH 100000 //每个线程操作次数
+#define THREAD_EXEC_CNT 100000 //每个线程操作次数
 #define THREAD_NUM 10 //线程个数
 
 

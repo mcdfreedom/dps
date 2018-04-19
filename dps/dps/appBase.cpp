@@ -34,9 +34,9 @@ int main(int argc, char* argv[])
 
 	  string sDbUser = "root";
 	  string sDbPasswd = "kemyond";
-	  string sDbIp = "192.168.163.166";
-	  string sDbName = "dps";
-	  string sDbTbName = "ruleConf";
+	  string sDbIp = "192.168.1.48";
+	  string sDbName = "log_anlysis";
+	  string sDbTbName = "rule_conf";
 	 const unsigned int iDbport = 3306;
 	  string  sDbQuerySql = "";
 

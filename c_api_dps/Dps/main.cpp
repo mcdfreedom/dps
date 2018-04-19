@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	string sSql = "select * from ruleConf";
 	pTool->query(sSql, sSql.length());
 	MYSQL_ROW oRow;
-	MYSQL_RES *pRes = cTool->query(sSql, sSql.length());
+	MYSQL_RES *pRes = pTool->query(sSql, sSql.length());
 	while (oRow = mysql_fetch_row(pRes)) {
 		for (int t = 0; t<mysql_num_fields(pRes); t++) {
 			printf("%s \n", oRow[t]);
@@ -107,12 +107,14 @@ int main(int argc, char* argv[])
 	if (iRet <= 0)
 		printf("insert_sql failed \n");
 
+
+
 	/**
-	*  功能描述:关闭数据库连接
+	*  功能描述:关闭数据库连接池
 	*  @param null
 	*  @return
 	*/
-	cTool->CloseMysql();
+	pPool->ReleaseConnection(pTool);
 
 	// \程序结束
 	if (pPool != NULL)
