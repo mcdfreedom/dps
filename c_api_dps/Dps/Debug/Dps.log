@@ -1,0 +1,16 @@
+﻿生成启动时间为 2018/4/19 10:14:34。
+     1>项目“C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Dps\Dps.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         D:\software\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\inc" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Tools.cpp
+         Tools.cpp
+     1>c:\users\mcdfreedom\documents\visual studio 2013\projects\dps\dps\tools.cpp(168): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 d:\software\microsoft visual studio 12.0\vc\include\string.h(112) : 参见“strcpy”的声明
+       Link:
+         D:\software\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Debug\Dps.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\McdFreedom\Documents\Visual Studio 2013\Projects\Dps\third\dblib" libmysql.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Debug\Dps.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Debug\Dps.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Tools.obj
+         Dps.vcxproj -> C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Debug\Dps.exe
+     1>已完成生成项目“C:\Users\McdFreedom\documents\visual studio 2013\Projects\Dps\Dps\Dps.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.87
