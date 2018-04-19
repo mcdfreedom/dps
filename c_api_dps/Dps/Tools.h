@@ -24,10 +24,6 @@
 #include <mutex>
 #include <atomic>
 #include <direct.h>//获取当前路径
-//#include <afxtempl.h>
-//#include <afxmt.h>
-//#include <windows.h>
-//#include <WinSock2.h>
 #include "mysql.h"
 
 using namespace std;//引入std命名空间
@@ -39,9 +35,32 @@ using namespace std;//引入std命名空间
 
 #pragma comment(lib, "libmysql.lib")
 
-namespace _sql_ {
+namespace sql {
 	static mutex  g_mtxmysql;//mysql操作对象的互斥对象  
 	static mutex  g_mtxMysqlPool;//mysql连接池的互斥对象  
+	typedef struct DBsetting
+	{
+		char cIp[24];//IP
+		char cUser[24];//用户名
+		char cPasswd[24];//密码
+		char cdb[24];//数据库名
+		unsigned int uiPort;//端口号
+		unsigned int uiConnpoolsize;//连接池最大大小
+		unsigned int uiReconnectCnt;//重连次数
+		unsigned int uiConTimeout;//连接超时时间
+		DBsetting(){
+			memset(cIp, 0, sizeof(cIp));
+			memset(cUser, 0, sizeof(cUser));
+			memset(cPasswd, 0, sizeof(cPasswd));
+			memset(cdb, 0, sizeof(cdb));
+			uiPort = 0;
+			uiConnpoolsize = 0;
+			uiReconnectCnt = 0;
+			uiConTimeout = 0;
+		}
+	}*pDBsetting, dbSetting;
+
+	static dbSetting g_DBsetting;//存放数据库配置信息，多个类使用
 	class CTools
 	{
 	public:
@@ -79,8 +98,8 @@ namespace _sql_ {
 		*返回值：
 		*	返回false表示数据库已经获取完毕，true表示数据还没有获取完毕
 		*/
-		bool select_sql_beack(__in const char *pSQL, __out ...);
-		bool select_sql_beack_s(__in const char *pSQL, __out ...);
+		bool selectsqlbeack(__in const char *pSQL, __out ...);
+		bool selectsqlbeack_s(__in const char *pSQL, __out ...);
 		/*
 		*修改/插入/删除功能
 		*参数：
@@ -146,11 +165,7 @@ namespace _sql_ {
 		*关闭mysql连接
 		*/
 		void CloseMysql(){
-			//if ( _pMysql )
-			{
-				mysql_close(&Mysql);
-				//_pMysql = NULL;
-			}
+			 mysql_close(&Mysql);
 		}
 
 		//是否自动提交
@@ -158,7 +173,7 @@ namespace _sql_ {
 
 	public:
 		bool execute(const char* pSQL);
-		MYSQL_RES * GetDbData(string sSql, unsigned int iSqlLen);
+		MYSQL_RES * query(string sSql, unsigned int iSqlLen);
 	private:
 		string m_strOldSql;	//旧的SQL语句
 		MYSQL_RES *m_pResult;//记录集
@@ -184,13 +199,14 @@ namespace _sql_ {
 		static mysql_connection_pool *GetInstance();
 
 		//初始化连接
-		int InitConnection(int nInitialSize = 1);
+		int InitConnection(int nInitialSize );
 		//设置mysql信息
-		void SetDatabaseInfo(const char* pIP,\
+		int setDBsetting(const char* pIP,\
 			const char* pUser,\
 			const char* pPwd,\
 			const char* pDatabase,\
-			unsigned short nPort /* = 3306 */);
+			unsigned int nPort /* = 3306 */
+			);
 		//获取msyql操作对象
 		CTools *GetConnection();
 		//回收连接对象
@@ -199,12 +215,6 @@ namespace _sql_ {
 		void DestoryConnPool();
 	public:
 		mysql_connection_pool();
-	private:
-		char m_szIP[128];
-		char m_szUser[128];
-		char m_szPwd[128];
-		char m_szDatabase[128];
-		short m_snPort;
 		std::queue<CTools *> the_queue;
 		mutex the_mutex;
 	};

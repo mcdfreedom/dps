@@ -2,9 +2,7 @@
 #include "tools.h"
 #include <stdarg.h>
 
-using namespace _sql_;
-
-
+using namespace sql;
 
 bool CTools::initmysql(const char* pIP,
 	const char* pUser,
@@ -28,7 +26,7 @@ bool CTools::initmysql(const char* pIP,
 
 }
 
-bool CTools::select_sql_beack(__in const char *pSQL, __out ...)
+bool CTools::selectsqlbeack(__in const char *pSQL, __out ...)
 {
 	va_list ap;
 	va_start(ap, pSQL);
@@ -37,7 +35,7 @@ bool CTools::select_sql_beack(__in const char *pSQL, __out ...)
 	return bRet;
 }
 
-bool CTools::select_sql_beack_s(__in const char *pSQL, __out ...)
+bool CTools::selectsqlbeack_s(__in const char *pSQL, __out ...)
 {
 	va_list ap;
 	va_start(ap, pSQL);
@@ -79,7 +77,6 @@ bool CTools::SelectBeack(__in const char *pSQL, e_strType nstrType, __out va_lis
 				return false;
 			}
 			m_strOldSql = pSQL;
-			//m_strOldSql.Format("%s", pSQL);
 		}
 		else
 		{
@@ -212,7 +209,7 @@ bool CTools::execute(const char* pSQL)
 
 }
 
-MYSQL_RES * _sql_::CTools::GetDbData(string sSql, unsigned int iSqlLen)
+MYSQL_RES * sql::CTools::query(string sSql, unsigned int iSqlLen)
 {
 
 	int iRet = mysql_real_query(&Mysql, sSql.c_str(), sSql.length());
@@ -243,7 +240,7 @@ bool CTools::insert_sql(const char *pSQL)
 }
 
 
-void _sql_::CTools::AutoCommitSQL(BOOL bAuto /*= TRUE*/)
+void sql::CTools::AutoCommitSQL(BOOL bAuto /*= TRUE*/)
 {
 	mysql_autocommit(&Mysql, bAuto);
 }
@@ -272,20 +269,16 @@ WCHAR* CTools::ToWChar(char *str)
 /************************************************************************/
 mysql_connection_pool::mysql_connection_pool()
 {
-	memset(_sql_::mysql_connection_pool::m_szIP, 0, sizeof(_sql_::mysql_connection_pool::m_szIP));
-	memset(_sql_::mysql_connection_pool::m_szPwd, 0, sizeof(_sql_::mysql_connection_pool::m_szPwd));
-	memset(_sql_::mysql_connection_pool::m_szDatabase, 0, sizeof(_sql_::mysql_connection_pool::m_szDatabase));
-	memset(_sql_::mysql_connection_pool::m_szUser, 0, sizeof(_sql_::mysql_connection_pool::m_szUser));
-	m_snPort = 0;
 }
 
-
-
+// \析构函数释放连接池
 mysql_connection_pool::~mysql_connection_pool()
 {
 	DestoryConnPool();
 }
 
+
+// \获取单事例句柄
 mysql_connection_pool * mysql_connection_pool::GetInstance()
 {
 	static mysql_connection_pool object;
@@ -295,26 +288,26 @@ mysql_connection_pool * mysql_connection_pool::GetInstance()
 CTools * mysql_connection_pool::GetConnection()
 {
 	g_mtxMysqlPool.lock();
-	CTools *pMysqlobject = NULL;
+	CTools *pTool = NULL;
 	if (the_queue.empty())
 	{
 		g_mtxMysqlPool.unlock();
-		return pMysqlobject;
+		return pTool;
 	}
-	pMysqlobject = the_queue.front();
+	pTool = the_queue.front();
 	the_queue.pop();
 	g_mtxMysqlPool.unlock();
-	return pMysqlobject;
+	return pTool;
 }
 
-int _sql_::mysql_connection_pool::InitConnection(int nInitialSize/*=1*/)
+int sql::mysql_connection_pool::InitConnection(int nInitialSize/*=1*/)
 {
 	assert(nInitialSize > 0);
 	g_mtxMysqlPool.lock();
 	for (int i = 0; i<nInitialSize; i++)
 	{
 		CTools *pObject = new CTools;
-		if (!pObject->initmysql(m_szIP, m_szUser, m_szPwd, m_szDatabase, m_snPort))
+		if (!pObject->initmysql(g_DBsetting.cIp, g_DBsetting.cUser, g_DBsetting.cPasswd, g_DBsetting.cdb, g_DBsetting.uiPort))
 		{
 			delete pObject;
 			pObject = NULL;
@@ -325,7 +318,7 @@ int _sql_::mysql_connection_pool::InitConnection(int nInitialSize/*=1*/)
 		*
 		*  使用者 在需要批量SQL执行完成后方可执行COMMIT语法 使得数据一并提交
 		*/
-		pObject->AutoCommitSQL(FALSE);//关闭自动提交 采用事务提交
+		pObject->AutoCommitSQL(TRUE);//关闭自动提交 采用事务提交
 		the_queue.push(pObject);
 	}
 	int nSize = the_queue.size();
@@ -333,21 +326,28 @@ int _sql_::mysql_connection_pool::InitConnection(int nInitialSize/*=1*/)
 	return nSize;
 }
 
-void _sql_::mysql_connection_pool::SetDatabaseInfo(const char* pIP, const char* pUser, const char* pPwd, const char* pDatabase, unsigned short nPort /* = 3306 */)
+// \设置DB连接属性
+int sql::mysql_connection_pool::setDBsetting(const char* pIP, const char* pUser, const char* pPwd, const char* pDatabase, unsigned int uiPort/*,
+	unsigned int uiConnpoolsize, unsigned int uiReconnectCnt, unsigned int uiConTimeout*/)
 {
-	assert(pIP != NULL);
+	int iRet = -1;
+	assert(pIP != NULL );
 	assert(pUser != NULL);
 	assert(pPwd != NULL);
 	assert(pDatabase != NULL);
 	g_mtxMysqlPool.lock();
-	memcpy(m_szIP, pIP, strlen(pIP));
-	memcpy(m_szUser, pUser, strlen(pUser));
-	memcpy(m_szPwd, pPwd, strlen(pPwd));
-	memcpy(m_szDatabase, pDatabase, strlen(pDatabase));
-	m_snPort = nPort;
+	memcpy(g_DBsetting.cIp, pIP, strlen(pIP));
+	memcpy(g_DBsetting.cUser, pUser, strlen(pUser));
+	memcpy(g_DBsetting.cPasswd, pPwd, strlen(pPwd));
+	memcpy(g_DBsetting.cdb, pDatabase, strlen(pDatabase));
+	g_DBsetting.uiPort = uiPort;
 	g_mtxMysqlPool.unlock();
+
+	iRet = 0;//如果assert检查配置无错误置为0
+	return iRet;
 }
 
+// \释放连接
 void mysql_connection_pool::ReleaseConnection(CTools * pObject)
 {
 	assert(pObject);
@@ -356,6 +356,8 @@ void mysql_connection_pool::ReleaseConnection(CTools * pObject)
 	g_mtxMysqlPool.unlock();
 }
 
+
+// \释放连接池
 void mysql_connection_pool::DestoryConnPool() {
 	g_mtxMysqlPool.lock();
 	if (!the_queue.empty())

@@ -22,9 +22,6 @@
     <Filter Include="头文件\common">
       <UniqueIdentifier>{813462af-8551-478f-8185-3602c582bfb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\test">
-      <UniqueIdentifier>{df6e9d30-dfc2-455c-b258-c71e167a285d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dps_define.h">
